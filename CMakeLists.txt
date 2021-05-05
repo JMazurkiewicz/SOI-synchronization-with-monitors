@@ -29,4 +29,8 @@ if(UNIX)
     target_link_libraries(SoiMonitors pthread)
 endif()
 
+if(MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
+
 target_include_directories(SoiMonitors PUBLIC include)
