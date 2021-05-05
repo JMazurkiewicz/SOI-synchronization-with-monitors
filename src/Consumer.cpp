@@ -7,33 +7,26 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
 
 Consumer::Consumer(SyncQueue& queue)
-    : queue{queue}, messageId{0},
-      value{0}, queueSize{0} { }
+    : queue{queue} { }
 
 void Consumer::run() {
-    while(messageId < MAX_SENT_DATA) {
-        std::tie(value, queueSize) = queue.pop();
-        log();
+    for(int i = 0; i < MAX_SENT_DATA; ++i) {
+        queue.pop([&, this](const SyncQueue& queue, int value) {
+            const std::time_t now = std::time(nullptr);
+
+            asyncPrint(
+                std::setfill('0'),
+                std::put_time(std::localtime(&now), "[%T] "),
+                name(), ": otrzymano wiadomość nr ", std::setw(4), i+1,
+                " o treści \"", value,
+                "\" [adres kolejki: ", &queue,
+                ", rozmiar kolejki: ", queue.size(),
+                ", nadawca: ", guessProducer(value), "]\n"
+            );
+        });
 
         std::this_thread::sleep_for(CONSUMER_COOLDOWN);
-        ++messageId;
     }
-}
-
-void Consumer::log() const {
-        std::ostringstream sstream;
-
-    sstream << std::setfill('0');
-    const std::time_t now = std::time(nullptr);
-
-    sstream << '[' << std::put_time(std::localtime(&now), "%H:%M:%S") << "] ";
-    sstream << name() << ": otrzymano wiadomość nr " << std::setw(4) << messageId+1;
-    sstream << " o treści \"" << value << "\" [adres kolejki: " << &queue;
-    sstream << ", rozmiar kolejki: " << queueSize;
-    sstream << ", nadawca: " << guessProducer(value) << "]\n";
-
-    asyncPrint(sstream.str());
 }

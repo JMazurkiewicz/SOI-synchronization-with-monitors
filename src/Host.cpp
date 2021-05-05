@@ -2,8 +2,6 @@
 
 #include "AsyncPrint.h"
 
-#include <sstream>
-
 void Host::invokeDelayed(const std::chrono::milliseconds& milli) {
     thread = std::thread{[this, milli] {
         std::this_thread::sleep_for(milli);
@@ -20,14 +18,9 @@ void Host::join() {
 }
 
 void Host::logStart() const {
-    std::ostringstream sstream;
-    sstream << "Host '" << name() << "' został uruchomiony w wątku ";
-    sstream << std::this_thread::get_id() << '\n';
-    asyncPrint(sstream.str());
+    asyncPrint("Host '", name(), "' został uruchomiony w wątku ", std::this_thread::get_id(), '\n');
 }
 
 void Host::logEnd() const {
-    std::ostringstream sstream;
-    sstream << "Host '" << name() << "' zakończył pracę\n";
-    asyncPrint(sstream.str());
+    asyncPrint("Host '", name(), "' zakończył pracę\n");
 }

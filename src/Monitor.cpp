@@ -2,6 +2,8 @@
 
 #include "Condition.h"
 
+Monitor::Monitor() : sem{1} { }
+
 void Monitor::enter() {
 	sem.p();
 }

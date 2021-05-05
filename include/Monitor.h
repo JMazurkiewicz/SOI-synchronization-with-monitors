@@ -7,7 +7,7 @@ class Condition;
 
 class Monitor {
 public:
-	Monitor() : sem{1} { }
+	Monitor();
 
     Monitor(const Monitor&) = delete;
     Monitor& operator=(const Monitor&) = delete;

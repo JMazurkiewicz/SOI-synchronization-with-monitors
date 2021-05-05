@@ -18,13 +18,8 @@ public:
 
 private:
     void run() override final;
-    void log() const;
 
     SyncQueue& queue;
-
-    int messageId;
-    int value;
-    std::size_t queueSize;
 };
 
 #endif

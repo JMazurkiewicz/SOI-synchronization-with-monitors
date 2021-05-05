@@ -3,7 +3,9 @@
 
 #include "Condition.h"
 #include "Monitor.h"
+#include "MonitorGuard.h"
 
+#include <functional>
 #include <queue>
 
 class SyncQueue : protected Monitor {
@@ -13,12 +15,40 @@ public:
     SyncQueue(const SyncQueue&) = delete;
     SyncQueue& operator=(const SyncQueue&) = delete;
 
-    std::size_t push(int value);
-    std::pair<int, std::size_t> pop();
+    template<typename Callback>
+    void push(int value, Callback&& callback) {
+        MonitorGuard guard{*this};
+        if(size() == maxSize) {
+            wait(full);
+        }
+
+        queue.push(value);
+        std::invoke(std::forward<Callback>(callback), *this);
+
+        if(size() == 1) {
+            signal(empty);
+        }
+    }
+
+    template<typename Callback>
+    void pop(Callback&& callback) {
+        MonitorGuard guard{*this};
+        if(size() == 0) {
+            wait(empty);
+        }
+
+        const int value = queue.front();
+        queue.pop();
+        std::invoke(std::forward<Callback>(callback), *this, value);
+
+        if(size() == maxSize-1) {
+            signal(full);
+        }
+    }
+
+    std::size_t size() const;
 
 private:
-    std::size_t getSize() const;
-
     const std::size_t maxSize;
 
     Condition full;

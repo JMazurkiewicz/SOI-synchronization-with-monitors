@@ -23,12 +23,6 @@ private:
 
     SyncQueue& queue1;
     SyncQueue& queue2;
-
-    int messageId;
-    SyncQueue* receiver;
-
-    int value;
-    std::size_t lastQueueSize;
 };
 
 std::string_view guessProducer(int value);

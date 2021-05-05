@@ -8,36 +8,29 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
 
 Producer::Producer(SyncQueue& queue1, SyncQueue& queue2)
-    : queue1{queue1}, queue2{queue2}, messageId{0},
-      receiver{nullptr}, value{0}, lastQueueSize{0} { }
+    : queue1{queue1}, queue2{queue2} { }
 
 void Producer::run() {
-    while(messageId < MAX_SENT_DATA) {
-        receiver = (messageId % 2 == 0 ? &queue1 : &queue2);
+    for(int i = 0; i < MAX_SENT_DATA; ++i) {
+        SyncQueue& receiver = (i % 2 == 0 ? queue1 : queue2);
 
-        value = produce();
-        lastQueueSize = receiver->push(value);
-        
-        log();
-        ++messageId;
+        const int value = produce();
+
+        receiver.push(value, [&, this](const SyncQueue& queue) {
+            const std::time_t now = std::time(nullptr);
+
+            asyncPrint(
+                std::setfill('0'),
+                std::put_time(std::localtime(&now), "[%T] "),
+                name(), ": wysłano wiadomość nr ", std::setw(4), i+1,
+                " o wartości \"", value,
+                "\" [adres kolejki: ", &queue,
+                ", rozmiar kolejki: ", queue.size(), "]\n"
+            );
+        });
     }
-}
-
-void Producer::log() const {
-    std::ostringstream sstream;
-
-    sstream << std::setfill('0');
-    const std::time_t now = std::time(nullptr);
-
-    sstream << '[' << std::put_time(std::localtime(&now), "%H:%M:%S") << "] ";
-    sstream << name() << ": wysłano wiadomość nr " << std::setw(4) << messageId+1;
-    sstream << " o wartości \"" << value << "\" [adres kolejki: " << receiver;
-    sstream << ", rozmiar kolejki: " << lastQueueSize << "]\n";
-
-    asyncPrint(sstream.str());
 }
 
 std::string_view guessProducer(int value) {

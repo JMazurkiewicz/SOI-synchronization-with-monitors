@@ -1,7 +1,8 @@
 #include "Semaphore.h"
 
 #ifdef _WIN32
-#  include <windows.h>
+
+#include <windows.h>
 
 struct Semaphore::Impl {
 public:
@@ -25,16 +26,17 @@ private:
     HANDLE sem;
 };
 
-#else
-#  include <errno.h> 
-#  include <fcntl.h> 
-#  include <pthread.h> 
-#  include <semaphore.h>
-#  include <string.h> 
-#  include <sys/types.h> 
-#  include <sys/stat.h> 
-#  include <system_error>
-#  include <unistd.h>
+#else // ^^^ _WIN32 / !_WIN32 vvv
+
+#include <errno.h> 
+#include <fcntl.h> 
+#include <pthread.h> 
+#include <semaphore.h>
+#include <string.h> 
+#include <sys/types.h> 
+#include <sys/stat.h> 
+#include <system_error>
+#include <unistd.h>
 
 struct Semaphore::Impl {
 public:
@@ -64,7 +66,7 @@ private:
     sem_t sem;
 };
 
-#endif
+#endif // ifndef _WIN32
 
 Semaphore::Semaphore(int value) : impl{std::make_unique<Impl>()} {
     impl->init(value);
