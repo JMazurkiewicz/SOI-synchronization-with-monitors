@@ -5,11 +5,11 @@
 Monitor::Monitor() : sem{1} { }
 
 void Monitor::enter() {
-	sem.p();
+    sem.p();
 }
 
 void Monitor::leave() {
-	sem.v();
+    sem.v();
 }
 
 void Monitor::wait(Condition& cond) {
