@@ -26,7 +26,7 @@ void Producer::run() {
                 std::put_time(std::localtime(&now), "[%T] "),
                 name, ": wysłano wiadomość nr ", std::setw(4), i+1,
                 " o wartości \"", value,
-                "\" [adres kolejki: ", &queue,
+                "\" [nazwa kolejki: ", queue.getName(),
                 ", rozmiar kolejki: ", queue.size(), "]\n"
             );
         });

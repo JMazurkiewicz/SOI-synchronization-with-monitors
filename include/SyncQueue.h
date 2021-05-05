@@ -7,10 +7,11 @@
 
 #include <functional>
 #include <queue>
+#include <string>
 
 class SyncQueue : protected Monitor {
 public:
-    explicit SyncQueue(std::size_t maxSize);
+    explicit SyncQueue(std::size_t maxSize, std::string name);
 
     SyncQueue(const SyncQueue&) = delete;
     SyncQueue& operator=(const SyncQueue&) = delete;
@@ -47,9 +48,11 @@ public:
     }
 
     std::size_t size() const;
+    std::string_view getName() const;
 
 private:
     const std::size_t maxSize;
+    std::string name;
 
     Condition full;
     Condition empty;

@@ -1,5 +1,3 @@
-#include "Producer.h"
-
 #include "hosts/ProducerA.h"
 #include "hosts/ProducerB.h"
 #include "hosts/ConsumerC.h"
@@ -8,7 +6,6 @@
 
 #include <chrono>
 #include <iostream>
-#include <thread>
 
 int main() {
     using namespace std::chrono_literals;
@@ -16,8 +13,8 @@ int main() {
     static constexpr std::size_t MAX_QUEUE_SIZE = 20;
     std::cout << std::unitbuf;
 
-    SyncQueue cQueue{MAX_QUEUE_SIZE};
-    SyncQueue dQueue{MAX_QUEUE_SIZE};
+    SyncQueue cQueue{MAX_QUEUE_SIZE, "c-queue"};
+    SyncQueue dQueue{MAX_QUEUE_SIZE, "d-queue"};
 
     ProducerA producerA{cQueue, dQueue};
     producerA.invokeDelayed(50ms);

@@ -20,7 +20,7 @@ void Consumer::run() {
                 std::put_time(std::localtime(&now), "[%T] "),
                 name, ": otrzymano wiadomość nr ", std::setw(4), i+1,
                 " o treści \"", value,
-                "\" [adres kolejki: ", &queue,
+                "\" [nazwa kolejki: ", queue.getName(),
                 ", rozmiar kolejki: ", queue.size(),
                 ", nadawca: ", guessProducer(value), "]\n"
             );
