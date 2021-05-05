@@ -3,10 +3,14 @@
 
 #include "Host.h"
 
+#include <chrono>
+
 class SyncQueue;
 
 class Consumer : public Host {
 public:
+    static constexpr std::chrono::milliseconds CONSUMER_COOLDOWN{1000};
+
     explicit Consumer(SyncQueue& queue);
 
     Consumer(const Consumer&) = delete;

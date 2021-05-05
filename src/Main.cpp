@@ -14,8 +14,6 @@ int main() {
     using namespace std::chrono_literals;
 
     static constexpr std::size_t MAX_QUEUE_SIZE = 20;
-
-    std::ios_base::sync_with_stdio(false);
     std::cout << std::unitbuf;
 
     SyncQueue cQueue{MAX_QUEUE_SIZE};

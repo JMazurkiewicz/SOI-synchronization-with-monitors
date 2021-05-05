@@ -22,6 +22,9 @@ protected:
     virtual std::string_view name() const = 0;
     virtual void run() = 0;
 
+    void logStart() const;
+    void logEnd() const;
+
 private:
     std::thread thread;
 };

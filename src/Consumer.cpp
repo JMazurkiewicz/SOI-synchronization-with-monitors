@@ -1,5 +1,6 @@
 #include "Consumer.h"
 
+#include "AsyncPrint.h"
 #include "Producer.h"
 #include "SyncQueue.h"
 
@@ -16,6 +17,8 @@ void Consumer::run() {
     while(messageId < MAX_SENT_DATA) {
         std::tie(value, queueSize) = queue.pop();
         log();
+
+        std::this_thread::sleep_for(CONSUMER_COOLDOWN);
         ++messageId;
     }
 }
@@ -32,5 +35,5 @@ void Consumer::log() const {
     sstream << ", rozmiar kolejki: " << queueSize;
     sstream << ", nadawca: " << guessProducer(value) << "]\n";
 
-    std::cout << sstream.str();
+    asyncPrint(sstream.str());
 }

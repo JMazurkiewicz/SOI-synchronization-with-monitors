@@ -1,5 +1,6 @@
 #include "Producer.h"
 
+#include "AsyncPrint.h"
 #include "hosts/ProducerA.h"
 #include "hosts/ProducerB.h"
 #include "SyncQueue.h"
@@ -36,7 +37,7 @@ void Producer::log() const {
     sstream << " o wartości \"" << value << "\" [adres kolejki: " << receiver;
     sstream << ", rozmiar kolejki: " << lastQueueSize << "]\n";
 
-    std::cout << sstream.str();
+    asyncPrint(sstream.str());
 }
 
 std::string_view guessProducer(int value) {
