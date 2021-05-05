@@ -8,9 +8,9 @@ jobs:
     
     strategy:
       matrix:
-        os: windows-2019
+        os: [windows-2019]
         platform: [Win32, x64]
-        standard: 17
+        standard: [17]
         build_type: [Debug, Release]
 
     steps:
