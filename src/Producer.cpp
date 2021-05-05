@@ -18,13 +18,13 @@ void Producer::run() {
 
         const int value = produce();
 
-        receiver.push(value, [&, this](const SyncQueue& queue) {
+        receiver.push(value, [=, name = name()](const SyncQueue& queue) {
             const std::time_t now = std::time(nullptr);
 
             asyncPrint(
                 std::setfill('0'),
                 std::put_time(std::localtime(&now), "[%T] "),
-                name(), ": wysłano wiadomość nr ", std::setw(4), i+1,
+                name, ": wysłano wiadomość nr ", std::setw(4), i+1,
                 " o wartości \"", value,
                 "\" [adres kolejki: ", &queue,
                 ", rozmiar kolejki: ", queue.size(), "]\n"

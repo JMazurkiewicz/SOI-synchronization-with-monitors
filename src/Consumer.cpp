@@ -6,20 +6,19 @@
 
 #include <ctime>
 #include <iomanip>
-#include <iostream>
 
 Consumer::Consumer(SyncQueue& queue)
     : queue{queue} { }
 
 void Consumer::run() {
     for(int i = 0; i < MAX_SENT_DATA; ++i) {
-        queue.pop([&, this](const SyncQueue& queue, int value) {
+        queue.pop([i, name = name()](const SyncQueue& queue, int value) {
             const std::time_t now = std::time(nullptr);
 
             asyncPrint(
                 std::setfill('0'),
                 std::put_time(std::localtime(&now), "[%T] "),
-                name(), ": otrzymano wiadomość nr ", std::setw(4), i+1,
+                name, ": otrzymano wiadomość nr ", std::setw(4), i+1,
                 " o treści \"", value,
                 "\" [adres kolejki: ", &queue,
                 ", rozmiar kolejki: ", queue.size(),

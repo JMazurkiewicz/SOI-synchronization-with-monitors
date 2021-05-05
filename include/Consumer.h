@@ -3,8 +3,6 @@
 
 #include "Host.h"
 
-#include <chrono>
-
 class SyncQueue;
 
 class Consumer : public Host {

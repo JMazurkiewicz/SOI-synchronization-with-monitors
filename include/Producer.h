@@ -3,8 +3,6 @@
 
 #include "Host.h"
 
-#include <string_view>
-
 class SyncQueue;
 
 class Producer : public Host {

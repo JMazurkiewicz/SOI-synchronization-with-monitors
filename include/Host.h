@@ -2,6 +2,7 @@
 #define HOST_H
 
 #include <chrono>
+#include <string_view>
 #include <thread>
 
 class Host {

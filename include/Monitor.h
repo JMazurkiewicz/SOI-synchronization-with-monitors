@@ -7,19 +7,19 @@ class Condition;
 
 class Monitor {
 public:
-	Monitor();
+    Monitor();
 
     Monitor(const Monitor&) = delete;
     Monitor& operator=(const Monitor&) = delete;
 
-	void enter();
-	void leave();
-	
-	void wait(Condition& cond);
-	void signal(Condition& cond);
+    void enter();
+    void leave();
+    
+    void wait(Condition& cond);
+    void signal(Condition& cond);
 
 private:
-	Semaphore sem;
+    Semaphore sem;
 };
 
 #endif
