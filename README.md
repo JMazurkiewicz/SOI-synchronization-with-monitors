@@ -2,6 +2,7 @@
 
 ![linux](https://github.com/JMazurkiewicz/SOI-synchronization-with-monitors/actions/workflows/linux.yml/badge.svg)
 ![windows](https://github.com/JMazurkiewicz/SOI-synchronization-with-monitors/actions/workflows/windows.yml/badge.svg)
+![macos](https://github.com/JMazurkiewicz/SOI-synchronization-with-monitors/actions/workflows/macos.yml/badge.svg)
 
 Autor: Jakub Mazurkiewicz
 
@@ -14,9 +15,8 @@ Zadanie jest rozwinięciem [zadania trzeciego](https://github.com/JMazurkiewicz/
 ## Kompilacja i uruchamianie
 
 ```bash
-mkdir build
+cmake -B build
 cd build
-cmake ..
 cmake --build .
 ./SoiMonitors > log-file.log
 ```
