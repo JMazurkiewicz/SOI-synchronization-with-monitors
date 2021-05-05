@@ -1,5 +1,8 @@
 # Monitory - SOI
 
+![linux](https://github.com/JMazurkiewicz/SOI-synchronization-with-monitors/actions/workflows/linux.yml/badge.svg)
+![windows](https://github.com/JMazurkiewicz/SOI-synchronization-with-monitors/actions/workflows/windows.yml/badge.svg)
+
 Autor: Jakub Mazurkiewicz
 
 Uzyskana ocena: ?/8
