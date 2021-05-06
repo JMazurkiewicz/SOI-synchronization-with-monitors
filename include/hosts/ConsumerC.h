@@ -8,7 +8,8 @@ public:
     using Consumer::Consumer;
 
 private:
-    std::string_view name() const override;
+    void consume(int value) override final;
+    std::string_view name() const override final;
 };
 
 #endif

@@ -12,7 +12,9 @@ Consumer::Consumer(SyncQueue& queue)
 
 void Consumer::run() {
     for(int i = 0; i < MAX_SENT_DATA; ++i) {
-        queue.pop([i, name = name()](const SyncQueue& queue, int value) {
+        int theValue = -1;
+
+        queue.pop([&, name = name()](const SyncQueue& queue, int value) mutable {
             const std::time_t now = std::time(nullptr);
 
             asyncPrint(
@@ -24,8 +26,10 @@ void Consumer::run() {
                 ", rozmiar kolejki: ", queue.size(),
                 ", nadawca: ", guessProducer(value), "]\n"
             );
+
+            theValue = value;
         });
 
-        std::this_thread::sleep_for(CONSUMER_COOLDOWN);
+        consume(theValue);
     }
 }
