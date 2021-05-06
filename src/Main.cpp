@@ -7,12 +7,13 @@
 #include <chrono>
 #include <iostream>
 
-int main() {
-    using namespace std::chrono_literals;
+using namespace std::chrono_literals;
 
-    static constexpr std::size_t MAX_QUEUE_SIZE = 20;
+int main() {
+    std::ios_base::sync_with_stdio(false);
     std::cout << std::unitbuf;
 
+    constexpr std::size_t MAX_QUEUE_SIZE = 20;
     SyncQueue cQueue{MAX_QUEUE_SIZE, "c-queue"};
     SyncQueue dQueue{MAX_QUEUE_SIZE, "d-queue"};
 
