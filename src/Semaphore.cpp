@@ -85,8 +85,12 @@ private:
 
 #else // ^^^ __linux__ / C++20 semaphore vvv
 
-#include <optional>
-#include <semaphore>
+#if __cpp_lib_semaphore < 201907L
+#  error C++20 semaphores are not supported by this compiler.
+#else
+#  include <optional>
+#  include <semaphore>
+#endif
 
 struct Semaphore::Impl {
 public:

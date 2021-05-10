@@ -2,12 +2,14 @@ cmake_minimum_required(VERSION 3.10)
 
 project("SOI - monitors")
 
-if(APPLE)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     # OS X doesn't support unnamed semaphores, so we need to use C++20 ones.
     set(CMAKE_CXX_STANDARD 20)
 else()
     set(CMAKE_CXX_STANDARD 17)
 endif()
+
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(SOURCES 
     src/AsyncPrint.cpp
