@@ -14,8 +14,7 @@
 struct Semaphore::Impl {
 public:
     void init(int value) {
-        sem = CreateSemaphore(nullptr, value, 1, nullptr);
-        if(sem == nullptr) {
+        if(CreateSemaphore(nullptr, static_cast<LONG>(value), 1, nullptr) == nullptr) {
             throwSystemError("CreateSemaphore failed");
         }
     }
@@ -25,15 +24,13 @@ public:
     }
 
     void p() {
-        const DWORD result = WaitForSingleObject(sem, INFINITE);
-        if(result == WAIT_FAILED) {
+        if(WaitForSingleObject(sem, INFINITE) == WAIT_FAILED) {
             throwSystemError("WaitForSingleObject failed");
         }
     }
 
     void v() {
-        const BOOL result = ReleaseSemaphore(sem, 1, nullptr);
-        if(result == 0) {
+        if(ReleaseSemaphore(sem, 1, nullptr) == 0) {
             throwSystemError("ReleaseSemaphore failed");
         }
     }
