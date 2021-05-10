@@ -1,6 +1,6 @@
 #include "Semaphore.h"
 
-#if defined(_WIN32)
+#if defined(_WIN32) && 0
 
 #include <system_error>
 #include <windows.h>
@@ -85,9 +85,7 @@ private:
 
 #else // ^^^ __linux__ / C++20 semaphore vvv
 
-#include <version>
-
-#if __cpp_lib_semaphore < 201907L
+#if !__has_include(<semaphore>)
 #  error C++20 semaphores are not supported by this compiler.
 #else
 #  include <optional>
