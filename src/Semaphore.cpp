@@ -85,12 +85,8 @@ private:
 
 #else // ^^^ __linux__ / C++20 semaphore vvv
 
-#if !__has_include(<semaphore>)
-#  error C++20 semaphores are not supported by this compiler.
-#else
-#  include <optional>
-#  include <semaphore>
-#endif
+#include <optional>
+#include <semaphore>
 
 struct Semaphore::Impl {
 public:
