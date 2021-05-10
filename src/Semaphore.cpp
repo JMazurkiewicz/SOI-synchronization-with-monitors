@@ -83,19 +83,13 @@ private:
     sem_t sem;
 };
 
-#else // ^^^ __linux__ / C++20 semaphore vvv
+#elif __cpp_lib_semaphore >= 201907L // ^^^ __linux__ / __cpp_lib_semaphore vvv
 
-#if __cpp_lib_semaphore < 201907L
-#  error C++20 semaphores are not supported by this compiler.
-#else
-#  include <optional>
-#  include <semaphore>
-#endif
+#include <optional>
+#include <semaphore>
 
 struct Semaphore::Impl {
 public:
-    using sem_t = std::counting_semaphore<>;
-
     void init(int value) {
         sem.emplace(static_cast<std::ptrdiff_t>(value));
     }
@@ -113,10 +107,12 @@ public:
     }
 
 private:
-    std::optional<sem_t> sem;
+    std::optional<std::counting_semaphore<>> sem;
 };
 
-#endif // if defined(_WIN32)
+#else // ^^^ __cpp_lib_semaphore / error vvv
+#error Unnamed semaphores are not supported by this platform.
+#endif
 
 Semaphore::Semaphore(int value) : impl{std::make_unique<Impl>()} {
     impl->init(value);
