@@ -6,7 +6,7 @@
 
 Autor: Jakub Mazurkiewicz
 
-Uzyskana ocena: ?/8
+Uzyskana ocena: 8/8
 
 ## Treść zadania
 
