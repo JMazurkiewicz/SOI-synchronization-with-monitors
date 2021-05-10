@@ -1,9 +1,8 @@
 #include "Semaphore.h"
 
+#if defined(_WIN32)
+
 #include <system_error>
-
-#ifdef _WIN32
-
 #include <windows.h>
 
 [[noreturn]] void throwSystemError(const char* what) {
@@ -21,7 +20,7 @@ public:
         }
     }
     
-    void destory() noexcept {
+    void destroy() noexcept {
         CloseHandle(sem);
     }
 
@@ -43,7 +42,7 @@ private:
     HANDLE sem;
 };
 
-#else // ^^^ _WIN32 / !_WIN32 vvv
+#elif defined(__linux__) // ^^^ _WIN32 / __linux__ vvv
 
 #include <errno.h> 
 #include <fcntl.h> 
@@ -52,6 +51,7 @@ private:
 #include <string.h> 
 #include <sys/types.h> 
 #include <sys/stat.h>
+#include <system_error>
 #include <unistd.h>
 
 [[noreturn]] void throwSystemError(const char* what) {
@@ -66,7 +66,7 @@ public:
         }
     }
     
-    void destory() noexcept {
+    void destroy() noexcept {
         sem_destroy(&sem); 
     }
 
@@ -86,14 +86,49 @@ private:
     sem_t sem;
 };
 
-#endif // ifndef _WIN32
+#else // ^^^ __linux__ / C++20 semaphore vvv
+
+#include <version>
+
+#if __cpp_lib_semaphore < 201907L
+#  error C++20 semaphores are not supported by this compiler.
+#else
+#  include <optional>
+#  include <semaphore>
+#endif
+
+struct Semaphore::Impl {
+public:
+    using sem_t = std::counting_semaphore<>;
+
+    void init(int value) {
+        sem.emplace(static_cast<std::ptrdiff_t>(value));
+    }
+    
+    void destroy() noexcept {
+        sem.reset();
+    }
+
+    void p() {
+        sem->acquire();
+    }
+
+    void v() {
+        sem->release();
+    }
+
+private:
+    std::optional<sem_t> sem;
+};
+
+#endif // if defined(_WIN32)
 
 Semaphore::Semaphore(int value) : impl{std::make_unique<Impl>()} {
     impl->init(value);
 }
 
 Semaphore::~Semaphore() {
-    impl->destory();
+    impl->destroy();
 }
 
 void Semaphore::p() {

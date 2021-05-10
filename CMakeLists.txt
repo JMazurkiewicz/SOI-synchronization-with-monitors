@@ -2,8 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 
 project("SOI - monitors")
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+if(APPLE)
+    # OS X doesn't support unnamed semaphores, so we need to use C++20 ones.
+    set(CMAKE_CXX_STANDARD 20)
+else()
+    set(CMAKE_CXX_STANDARD 17)
+endif()
 
 set(SOURCES 
     src/AsyncPrint.cpp
