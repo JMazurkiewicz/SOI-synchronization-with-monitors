@@ -1,6 +1,6 @@
 #include "Semaphore.h"
 
-#if defined(_WIN32) && 0
+#if defined(_WIN32)
 
 #include <system_error>
 #include <windows.h>
