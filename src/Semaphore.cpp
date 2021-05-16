@@ -14,7 +14,8 @@
 struct Semaphore::Impl {
 public:
     void init(int value) {
-        if(CreateSemaphore(nullptr, static_cast<LONG>(value), 1, nullptr) == nullptr) {
+        sem = CreateSemaphore(nullptr, static_cast<LONG>(value), 1, nullptr);
+        if(sem == nullptr) {
             throwSystemError("CreateSemaphore failed");
         }
     }
