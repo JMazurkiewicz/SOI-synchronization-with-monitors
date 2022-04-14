@@ -1,17 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 
-project("SOI - monitors")
+project("SOI-Monitors" LANGUAGES CXX)
 
-if(APPLE)
-    # OS X doesn't support unnamed semaphores, so we need to use C++20 ones.
-    set(CMAKE_CXX_STANDARD 20)
-else()
-    set(CMAKE_CXX_STANDARD 17)
-endif()
+add_executable(
+    SoiMonitors
 
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-set(SOURCES 
     src/AsyncPrint.cpp
     src/Condition.cpp
     src/Consumer.cpp
@@ -29,15 +22,19 @@ set(SOURCES
     src/hosts/ProducerB.cpp
 )
 
-add_executable(SoiMonitors ${SOURCES})
+find_package(Threads REQUIRED)
+target_compile_features(SoiMonitors PUBLIC cxx_std_17)
+target_link_libraries(SoiMonitors PRIVATE Threads::Threads)
+target_include_directories(SoiMonitors PUBLIC include)
 
-if(UNIX)
-    target_link_libraries(SoiMonitors rt)
-    target_link_libraries(SoiMonitors pthread)
+if(APPLE) # OS X doesn't support unnamed semaphores, so we need to use C++20 ones.
+    target_compile_features(SoiMonitors PRIVATE cxx_std_20)
+endif()
+
+if(UNIX AND NOT APPLE)
+    target_link_libraries(SoiMonitors PRIVATE rt)
 endif()
 
 if(MSVC)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    target_compile_definitions(SoiMonitors PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
-
-target_include_directories(SoiMonitors PUBLIC include)

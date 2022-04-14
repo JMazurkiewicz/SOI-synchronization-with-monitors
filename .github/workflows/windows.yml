@@ -4,20 +4,18 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ${{matrix.os}}
+    runs-on: windows-latest
 
     strategy:
       matrix:
-        os: [windows-2019]
-        platform: [Win32, x64]
-        standard: [17]
         build_type: [Debug, Release]
+        platform: [Win32, x64]
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
+      run: cmake -B build -A ${{matrix.platform}}
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{matrix.build_type}} 
+      run: cmake --build build --config ${{matrix.build_type}} 
